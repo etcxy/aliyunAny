@@ -1,5 +1,7 @@
 import paramiko
 
+from instance.config import id_rsa_position
+
 
 class ConnectShell:
 
@@ -9,10 +11,11 @@ class ConnectShell:
         self.hostname = hostname
         # 创建SSHClient 实例对象
         self.conn = paramiko.SSHClient()
+        self.conn.load_system_host_keys()
         # 调用方法，表示没有存储远程机器的公钥，允许访问
         self.conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # 连接远程机器，地址，端口，用户名密码
-        self.conn.connect(hostname, port, username, timeout=10)
+        self.conn.connect(hostname, port, username, key_filename=id_rsa_position, timeout=10)
 
     def do_action(self, command):
         # 输入linux命令
@@ -24,14 +27,13 @@ class ConnectShell:
         err_result = stderr.read()
         if err_result:
             print(str(err_result, encoding='utf-8'))
+        print(self.hostname + " hosts 写入成功")
 
     def __del__(self):
-        print(self.hostname + " hosts 写入成功")
         self.conn.close()
 
 
 # 测试使用
 if __name__ == '__main__':
-    con = ConnectShell("hadoop001", "root")
-    con.do_action("sed -i '/hadoop001/d' /etc/hosts")
+    con = ConnectShell("xx.xx.xx.xx", "root")
     con.do_action("ls")

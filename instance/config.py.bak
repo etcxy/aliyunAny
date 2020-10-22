@@ -19,6 +19,10 @@ key_pair = ""
 # 交换机ID
 vswitch_id = "vsw-zzzzzzzzzzzzzzzzzzzz"
 
+# 私钥位置
+id_rsa_position = ""
+
+
 # hosts文件位置 修改文件，需要管理员权限
 # hosts_position = "/etc/hosts"
 # hosts_position = "C:windows/system32/..."
