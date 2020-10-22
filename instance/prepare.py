@@ -130,6 +130,7 @@ class Prepare(object):
                         break
                 if not nb:
                     output.write(line)
+            output.writelines("\n")
             for key in public_ip:
                 output.writelines(public_ip[key] + " " + key + "\n")
             output.close()
