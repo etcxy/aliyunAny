@@ -1,0 +1,30 @@
+from aliyunsdkcore.client import AcsClient
+
+# 服务器位置
+location = "cn-hangzhou"
+
+# api id-key
+client = AcsClient(
+    "xxxxxxxxxxxxxx",
+    "yyyyyyyyyyyyyyyyyyyyyyyyyy",
+    location
+)
+
+# 网络安全组
+security_group_id = "sg-xxxxxxxxx"
+
+# 主控机key
+key_pair = ""
+
+# 交换机ID
+vswitch_id = "vsw-zzzzzzzzzzzzzzzzzzzz"
+
+# hosts文件位置 修改文件，需要管理员权限
+# hosts_position = "/etc/hosts"
+# hosts_position = "C:windows/system32/..."
+
+# hosts_known位置(Linux系统需要)
+hosts_known_position = "/Users/nnnnnnn/.ssh/known_hosts"
+
+# 自定义主机配置
+instance_machine_type = ""
