@@ -171,10 +171,10 @@ class Prepare(object):
                 print(private_ip)
                 self.do_with_private_network(private_ip)
                 self.remove_known_hosts(public_ip)
-                break
+                return
             if time.time() - start > CHECK_TIMEOUT:
                 print("未检测到实例")
-                break
+                return
             time.sleep(CHECK_INTERVAL)
 
 
