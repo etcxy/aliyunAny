@@ -99,6 +99,8 @@ def force_delete_instance():
 
 if __name__ == '__main__':
 
+    pre = Prepare()
+    release = Release()
     while True:
         input_chars = input(
             """
@@ -111,9 +113,9 @@ if __name__ == '__main__':
             | 6. 直接释放
             | 7. 退出程序
             | > \033[0m""".replace(" ", "").strip())
-
-        pre = Prepare()
-        release = Release()
+        if not input_chars.strip():
+            print("\n")
+            continue
         if input_chars == "1":
             pre_work()
         elif input_chars == "2":

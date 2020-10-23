@@ -18,7 +18,7 @@ class ConnectShell:
         if id_rsa_position:
             self.conn.connect(hostname, port, username, key_filename=id_rsa_position, timeout=10)
         else:
-            self.conn.connect(hostname, port, username, key_filename=id_rsa_position, timeout=10)
+            self.conn.connect(hostname, port, username, timeout=10)
 
     def do_action(self, command):
         # 输入linux命令
