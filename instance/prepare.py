@@ -109,7 +109,7 @@ class Prepare(object):
         return True if response else not response
 
     def remove_known_hosts(self, public_ip: dict):
-        if len(hosts_known_position) > 0:
+        if hosts_known_position:
             host_list = list(public_ip.keys()) + list(public_ip.values())
             for host in host_list:
                 os.system("sed -i '' '/'" + host + "'/d' " + hosts_known_position)
@@ -152,7 +152,7 @@ class Prepare(object):
                 host_dict[ssh].do_action("sed -i \'/" + host_name + "/d\' /etc/hosts")
             host_dict[ssh].do_action("echo \'" + str_ip + "\' >> /etc/hosts")
 
-            # print(host_name + "host写入成功")
+            print(host_name + "host写入成功")
 
     def get_network(self):
         # 获取公网，私网
