@@ -137,6 +137,7 @@ class Prepare(object):
             output.close()
         except PermissionError as error:
             print("\033[1;31m" + str(error) + " \033[0m")
+        print("本地hosts写入成功")
 
     def do_with_private_network(self, private_ip):
         str_ip: str = ""
@@ -152,7 +153,7 @@ class Prepare(object):
                 host_dict[ssh].do_action("sed -i \'/" + host_name + "/d\' /etc/hosts")
             host_dict[ssh].do_action("echo \'" + str_ip + "\' >> /etc/hosts")
 
-            print(host_name + "host写入成功")
+        print(host_name + "host写入成功")
 
     def get_network(self):
         # 获取公网，私网
