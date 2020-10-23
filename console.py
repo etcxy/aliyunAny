@@ -92,6 +92,11 @@ def delete_instance():
     re.release_instance()
 
 
+def force_delete_instance():
+    re = Release()
+    re.release_instance()
+
+
 if __name__ == '__main__':
 
     while True:
@@ -103,7 +108,8 @@ if __name__ == '__main__':
             | 3. 查看实例
             | 4. 网络写入
             | 5. 释放实例
-            | 6. 退出程序
+            | 6. 直接释放
+            | 7. 退出程序
             | > \033[0m""".replace(" ", "").strip())
 
         pre = Prepare()
@@ -125,6 +131,8 @@ if __name__ == '__main__':
             else:
                 print("\033[1;31m" + "当前无实例，还要删？" + " \033[0m")
         elif input_chars == "6":
+            force_delete_instance()
+        elif input_chars == "7":
             exit(0)
         else:
             print("输入有误，请核对....")
