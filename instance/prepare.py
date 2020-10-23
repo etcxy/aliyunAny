@@ -109,9 +109,10 @@ class Prepare(object):
         return True if response else not response
 
     def remove_known_hosts(self, public_ip: dict):
-        host_list = list(public_ip.keys()) + list(public_ip.values())
-        for host in host_list:
-            os.system("sed -i '' '/'" + host + "'/d' " + hosts_known_position)
+        if hosts_known_position:
+            host_list = list(public_ip.keys()) + list(public_ip.values())
+            for host in host_list:
+                os.system("sed -i '' '/'" + host + "'/d' " + hosts_known_position)
 
     def do_with_public_network(self, public_ip):
         try:
