@@ -153,7 +153,7 @@ class Prepare(object):
                 host_dict[ssh].do_action("sed -i \'/" + host_name + "/d\' /etc/hosts")
             host_dict[ssh].do_action("echo \'" + str_ip + "\' >> /etc/hosts")
 
-        print(host_name + "host写入成功")
+        print("主机内网hosts写入成功")
 
     def get_network(self):
         # 获取公网，私网
