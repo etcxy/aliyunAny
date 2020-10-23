@@ -27,7 +27,6 @@ class ConnectShell:
         err_result = stderr.read()
         if err_result:
             print(str(err_result, encoding='utf-8'))
-        print(self.hostname + " hosts 写入成功")
 
     def __del__(self):
         self.conn.close()

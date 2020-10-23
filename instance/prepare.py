@@ -115,7 +115,7 @@ class Prepare(object):
 
     def do_with_public_network(self, public_ip):
         try:
-            host_input = open(hosts_position, 'r')
+            host_input = open(hosts_position, 'r', encoding=encode)
             host_lines = host_input.readlines()
             host_input.close()
 
@@ -150,6 +150,7 @@ class Prepare(object):
             for host_name in private_ip.keys():
                 host_dict[ssh].do_action("sed -i \'/" + host_name + "/d\' /etc/hosts")
             host_dict[ssh].do_action("echo \'" + str_ip + "\' >> /etc/hosts")
+            print(host_name + "host写入成功")
 
     def get_network(self):
         # 获取公网，私网

@@ -23,12 +23,14 @@ vswitch_id = "vsw-zzzzzzzzzzzzzzzzzzzz"
 id_rsa_position = ""
 
 
-# hosts文件位置 修改文件，需要管理员权限
-# hosts_position = "/etc/hosts"
+# hosts文件位置 (修改文件，需要管理员权限)
 # hosts_position = "C:windows/system32/..."
 
 # hosts_known位置(Linux系统需要)
-hosts_known_position = "/Users/nnnnnnn/.ssh/known_hosts"
+hosts_known_position = ""
 
 # 自定义主机配置
 instance_machine_type = ""
+
+# Windows需要此设置 其他平台设置为 utf-8
+encode = "utf-8-sig"

@@ -12,6 +12,7 @@
 pip install aliyun-python-sdk-bssopenapi
 pip install aliyun-python-sdk-ecs
 pip install aliyun-python-sdk-core 
+pip install paramiko
 ```
 
 #### 1.2 修改config.py.bak
