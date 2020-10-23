@@ -15,7 +15,10 @@ class ConnectShell:
         # 调用方法，表示没有存储远程机器的公钥，允许访问
         self.conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # 连接远程机器，地址，端口，用户名密码
-        self.conn.connect(hostname, port, username, key_filename=id_rsa_position, timeout=10)
+        if id_rsa_position:
+            self.conn.connect(hostname, port, username, key_filename=id_rsa_position, timeout=10)
+        else:
+            self.conn.connect(hostname, port, username, key_filename=id_rsa_position, timeout=10)
 
     def do_action(self, command):
         # 输入linux命令
