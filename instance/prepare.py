@@ -15,7 +15,6 @@ from aliyunsdkecs.request.v20140526.RevokeSecurityGroupRequest import RevokeSecu
 from instance.config import *
 
 # 准备操作
-from instance.connect import ConnectShell
 from instance.running import Running
 
 CHECK_INTERVAL = 3
@@ -106,6 +105,7 @@ class Prepare(object):
         request.set_Policy("accept")
         request.set_Priority("2")
         response = self.client.do_action_with_exception(request)
+        my_ip = None
         return True if response else not response
 
     def remove_known_hosts(self, public_ip: dict):
@@ -140,20 +140,21 @@ class Prepare(object):
         print("本地hosts写入成功")
 
     def do_with_private_network(self, private_ip):
-        str_ip: str = ""
-        host_dict = {}
-
-        for hostname in private_ip:
-            str_ip += private_ip[hostname] + " " + hostname + "\n"
-            ssh = ConnectShell(hostname, "root")
-            host_dict.update({hostname: ssh})
-
-        for ssh in host_dict:
-            for host_name in private_ip.keys():
-                host_dict[ssh].do_action("sed -i \'/" + host_name + "/d\' /etc/hosts")
-            host_dict[ssh].do_action("echo \'" + str_ip + "\' >> /etc/hosts")
-
-        print("主机内网hosts写入成功")
+        # str_ip: str = ""
+        # host_dict = {}
+        #
+        # for hostname in private_ip:
+        #     str_ip += private_ip[hostname] + " " + hostname + "\n"
+        #     ssh = ConnectShell(hostname, "root")
+        #     host_dict.update({hostname: ssh})
+        #
+        # for ssh in host_dict:
+        #     for host_name in private_ip.keys():
+        #         host_dict[ssh].do_action("sed -i \'/" + host_name + "/d\' /etc/hosts")
+        #     host_dict[ssh].do_action("echo \'" + str_ip + "\' >> /etc/hosts")
+        #
+        # print("主机内网hosts写入成功")
+        pass
 
     def get_network(self):
         # 获取公网，私网
@@ -164,12 +165,11 @@ class Prepare(object):
             print("正在第 " + str(times) + " 次查询")
             run = Running()
             public_ip = run.get_public_ips()
-            private_ip = run.get_private_ips()
-            if public_ip and private_ip:
+            if public_ip:
                 print(public_ip)
                 self.do_with_public_network(public_ip)
-                print(private_ip)
-                self.do_with_private_network(private_ip)
+
+                # Linux需要
                 self.remove_known_hosts(public_ip)
                 return
             if time.time() - start > CHECK_TIMEOUT:

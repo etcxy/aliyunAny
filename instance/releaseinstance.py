@@ -183,7 +183,6 @@ class Release(object):
         request.set_InstanceIds(instance_list)
         request.set_Force(True)
         response = client.do_action_with_exception(request)
-        print(str(response, encoding='utf-8'))
-
-
-
+        json_res = json.loads(response, encoding='utf-8')
+        if json_res["RequestId"]:
+            print("实例释放成功")

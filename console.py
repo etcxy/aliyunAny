@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 # coding=utf-8
+import json
 import webbrowser
+from time import sleep
+
+from aliyunsdkcore import acs_exception
+from aliyunsdkcore.acs_exception.exceptions import ServerException
+from aliyunsdkecs.request.v20140526.ModifyInstanceVpcAttributeRequest import ModifyInstanceVpcAttributeRequest
+from aliyunsdkecs.request.v20140526.StartInstancesRequest import StartInstancesRequest
+from aliyunsdkecs.request.v20140526.StopInstancesRequest import StopInstancesRequest
 
 from instance.createinstance import AliyunRunInstances
+from instance.describemessage import describe_instance_status, describe_instance
 from instance.prepare import Prepare
 from instance.releaseinstance import Release
 
@@ -70,10 +79,63 @@ def create_work():
         else:
             print("取消创建...")
 
+    instance_id = []
+
     for key in res:
         if key.startswith('hadoop00'):
             print("key:%s value:%s" % (key, res[key]))
-            AliyunRunInstances(instance_machine_type_x, res[key], key, key).run()
+            instance_id += AliyunRunInstances(instance_machine_type_x, res[key], key, key).run()
+
+    return instance_id
+
+
+def stop_instances(instances_ids):
+    request = StopInstancesRequest()
+    request.set_accept_format('json')
+    request.set_InstanceIds(instances_ids)
+    request.set_StoppedMode("KeepCharging")
+    request.set_ForceStop(True)
+
+    while True:
+        try:
+            stoppable = True
+            client.do_action_with_exception(request)
+        except acs_exception.exceptions.ServerException:
+            stoppable = False
+            print("机器暂不可停机，请稍等")
+            sleep(3)
+        if stoppable:
+            break
+
+    while True:
+        status = describe_instance_status(instances_ids)
+        stopped = True
+        for i in status:
+            if i["Status"] != "Stopped":
+                stopped = False
+        if stopped:
+            return
+        sleep(1)
+
+
+def start_instance(instances_ids):
+    request = StartInstancesRequest()
+    request.set_accept_format('json')
+    request.set_InstanceIds(instances_ids)
+    if json.loads(client.do_action_with_exception(request), encoding='utf-8')["RequestId"]:
+        print("实例启动中...")
+
+
+def modify_ip(instances_ids):
+    request = ModifyInstanceVpcAttributeRequest()
+    request.set_accept_format('json')
+    for hadoopx in instances_ids:
+        request.set_InstanceId(instances_ids.get(hadoopx))
+        request.set_VSwitchId(vswitch_id)
+        request.set_PrivateIpAddress(inner_internet + str(hadoopx[len(hadoopx) - 1]))
+        response = client.do_action_with_exception(request)
+        if json.loads(response, encoding='utf-8')["RequestId"]:
+            print(hadoopx + "内网修改成功")
 
 
 def delete_instance():
@@ -119,7 +181,14 @@ if __name__ == '__main__':
         if input_chars == "1":
             pre_work()
         elif input_chars == "2":
-            create_work()
+            # 创建instance
+            ids = create_work()
+            # stop instance
+            stop_instances(ids)
+            # modify inner ip
+            modify_ip(describe_instance())
+            # start instance
+            start_instance(ids)
         elif input_chars == "3":
             print("查看")
         elif input_chars == "4":
